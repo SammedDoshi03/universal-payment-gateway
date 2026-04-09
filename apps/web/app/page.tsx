@@ -38,8 +38,8 @@ export default function Home() {
         sessionId: "cs_test_simulated_session_id"
       });
       alert('Stripe redirect successful!');
-    } catch (e: any) {
-      alert("Error: " + e.message);
+    } catch (error) {
+      alert("Error: " + (error as Error).message);
     }
   };
 
@@ -51,8 +51,8 @@ export default function Home() {
         amount: "200.00",
         currency: "INR"
       });
-    } catch (e: any) {
-      alert("Error: " + e.message);
+    } catch (error) {
+       alert("Error: " + (error as Error).message);
     }
   };
 
@@ -70,8 +70,8 @@ export default function Home() {
       if (response.status === 'AWAITING_WEB_SCAN') {
         setUpiUrl(response.nativeData);
       }
-    } catch (e: any) {
-      alert("Error: " + e.message);
+    } catch (error) {
+      alert("Error: " + (error as Error).message);
     }
   };
 
