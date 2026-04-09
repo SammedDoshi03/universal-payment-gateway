@@ -1,6 +1,6 @@
 {
   "name": "universal-payment-gateway",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A cross-platform React and React Native SDK for seamless UPI payments",
   "main": "build/index.js",
   "types": "build/index.d.ts",
@@ -34,17 +34,19 @@
   "bugs": {
     "url": "https://github.com/SammedDoshi03/universal-upi/issues"
   },
-  "author": "Sammed Doshi <developer@example.com> (https://github.com/SammedDoshi03)",
+  "author": "Sammed Doshi <sammeddoshi03.sd@gmail.com> (https://github.com/SammedDoshi03)",
   "license": "MIT",
   "homepage": "https://github.com/SammedDoshi03/universal-upi#readme",
   "dependencies": {
     "qrcode.react": "^4.2.0"
   },
   "devDependencies": {
+    "@stripe/stripe-react-native": "^0.63.0",
     "@types/react": "~19.1.1",
     "expo": "^55.0.11",
     "expo-module-scripts": "^55.0.2",
-    "react-native": "0.82.1"
+    "react-native": "0.82.1",
+    "react-native-razorpay": "^2.3.1"
   },
   "peerDependencies": {
     "expo": "*",
