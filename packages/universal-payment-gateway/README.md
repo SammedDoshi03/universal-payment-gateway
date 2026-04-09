@@ -7,18 +7,19 @@ A powerful, cross-platform React and React Native SDK for seamless payment integ
 - **True Universal SDK**: Write your checkout code once. Route traffic based on the user's choice. 
 - **Zero Bundle Bloat**: Stripe and Razorpay SDKs are loaded via **Dynamic Imports**. If you only use UPI, your app size stays incredibly small.
 - **Native Android UPI Intents**: Opens GPay, PhonePe, and Paytm instantly. *Zero Commission.*
-- **Intelligent Web Fallback**: Displays dynamic, scannable QR Codes for Desktop browsers automatically.
+- **Desktop Web Fallback**: Displays dynamic, scannable QR Codes seamlessly when users open UPI on a Desktop browser!
 - **Expo & Bare RN Compatible**: Powered by the modern JSI architecture.
 
 ---
 
-## 📦 Installation
+## 📦 Requirements & Installation
 
 ```bash
 npm install universal-payment-gateway
 ```
 
-If you plan to use the Credit Card or Netbanking gateways, ensure you install their respective peer dependencies. *(Optional)*
+### Gateway Dependencies (Optional but required if routing)
+If you configure the hook to route to Stripe or Razorpay, you **must** install their respective official SDKs. Because of our dynamic imports, you do not have to install them if you only plan to use UPI.
 ```bash
 npm install @stripe/stripe-react-native react-native-razorpay
 ```
@@ -71,10 +72,12 @@ Our SDK simplifies multi-gateway routing into a single hook: `useUniversalPaymen
 Using the `UPI` method bypasses Stripe/Razorpay entirely and directly invokes the Google Pay / PhonePe native apps installed on the device.
 
 ```tsx
-import { useUniversalPayment } from 'universal-payment-gateway';
+import { useUniversalPayment, UpiWebInterface } from 'universal-payment-gateway';
+import { useState } from 'react';
 
 export function UPIButton() {
   const { checkout, globalStatus } = useUniversalPayment();
+  const [webQrUrl, setWebQrUrl] = useState<string | null>(null);
 
   const handlePay = async () => {
     try {
@@ -86,12 +89,23 @@ export function UPIButton() {
         tr: 'order_12345678',
       });
       console.log('UPI Transaction Successful:', response.nativeData);
+      
+      // 🌐 WEB FALLBACK HANDLING
+      // If the user clicked UPI on a Desktop Browser, we get the 'AWAITING_WEB_SCAN' status!
+      if (response.status === 'AWAITING_WEB_SCAN') {
+         setWebQrUrl(response.nativeData);
+      }
     } catch (err) {
       console.error('Payment failed / cancelled', err);
     }
   };
 
-  return <Button title="Pay via native UPI📱" onPress={handlePay} />;
+  return (
+    <>
+      <Button title="Pay via native UPI📱" onPress={handlePay} />
+      {webQrUrl && <UpiWebInterface paymentUrl={webQrUrl} size={250} />}
+    </>
+  );
 }
 ```
 

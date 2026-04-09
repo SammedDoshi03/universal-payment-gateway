@@ -1,6 +1,11 @@
+
+"use client";
+
+import { useState } from "react";
 import Image, { type ImageProps } from "next/image";
 import { Button } from "@repo/ui/button";
 import styles from "./page.module.css";
+import { useUniversalPayment, UpiWebInterface } from "universal-payment-gateway";
 
 type Props = Omit<ImageProps, "src"> & {
   srcLight: string;
@@ -19,6 +24,57 @@ const ThemeImage = (props: Props) => {
 };
 
 export default function Home() {
+  const { checkout, globalStatus } = useUniversalPayment();
+
+  const [upiUrl, setUpiUrl] = useState<string | null>(null);
+
+  const handleStripe = async () => {
+    try {
+      await checkout({
+        method: "CARD",
+        gatewayOverride: "STRIPE",
+        amount: "100.00",
+        currency: "USD",
+        sessionId: "cs_test_simulated_session_id"
+      });
+      alert('Stripe redirect successful!');
+    } catch (e: any) {
+      alert("Error: " + e.message);
+    }
+  };
+
+  const handleRazorpay = async () => {
+    try {
+      await checkout({
+        method: "NETBANKING",
+        gatewayOverride: "RAZORPAY",
+        amount: "200.00",
+        currency: "INR"
+      });
+    } catch (e: any) {
+      alert("Error: " + e.message);
+    }
+  };
+
+  const handleUpi = async () => {
+    try {
+      const response = await checkout({
+        method: "UPI",
+        pa: "testmerchant@upi",
+        pn: "Store Name",
+        am: "500.00",
+        tr: "order_123"
+      });
+      console.log(response);
+
+      if (response.status === 'AWAITING_WEB_SCAN') {
+        setUpiUrl(response.nativeData);
+      }
+    } catch (e: any) {
+      alert("Error: " + e.message);
+    }
+  };
+
   return (
     <div className={styles.page}>
       <main className={styles.main}>
@@ -31,72 +87,42 @@ export default function Home() {
           height={38}
           priority
         />
-        <ol>
-          <li>
-            Get started by editing <code>apps/web/app/page.tsx</code>
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+
+        <h2>Test the Master Payment SDK!</h2>
+
+        <p>Status: <strong>{globalStatus}</strong></p>
+
+        {upiUrl && (
+          <div style={{ padding: '20px', background: 'white', border: '2px solid black', margin: '20px 0' }}>
+            <h3>Scan this QR Code with any UPI App</h3>
+            <UpiWebInterface paymentUrl={upiUrl} size={250} />
+          </div>
+        )}
 
         <div className={styles.ctas}>
-          <a
+          <button
             className={styles.primary}
-            href="https://vercel.com/new/clone?demo-description=Learn+to+implement+a+monorepo+with+a+two+Next.js+sites+that+has+installed+three+local+packages.&demo-image=%2F%2Fimages.ctfassets.net%2Fe5382hct74si%2F4K8ZISWAzJ8X1504ca0zmC%2F0b21a1c6246add355e55816278ef54bc%2FBasic.png&demo-title=Monorepo+with+Turborepo&demo-url=https%3A%2F%2Fexamples-basic-web.vercel.sh%2F&from=templates&project-name=Monorepo+with+Turborepo&repository-name=monorepo-turborepo&repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fturborepo%2Ftree%2Fmain%2Fexamples%2Fbasic&root-directory=apps%2Fdocs&skippable-integrations=1&teamSlug=vercel&utm_source=create-turbo"
-            target="_blank"
-            rel="noopener noreferrer"
+            onClick={handleStripe}
           >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://turborepo.dev/docs?utm_source"
-            target="_blank"
-            rel="noopener noreferrer"
+            💳 Pay via Stripe
+          </button>
+
+          <button
+            onClick={handleRazorpay}
             className={styles.secondary}
           >
-            Read our docs
-          </a>
+            🏦 Pay via Razorpay
+          </button>
+
+          <button
+            onClick={handleUpi}
+            style={{ padding: '10px 20px', borderRadius: '50px', border: '1px solid black', cursor: 'pointer' }}
+          >
+            📱 Pay via UPI (Web Fallback)
+          </button>
         </div>
-        <Button appName="web" className={styles.secondary}>
-          Open alert
-        </Button>
       </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com/templates?search=turborepo&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://turborepo.dev?utm_source=create-turbo"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to turborepo.dev →
-        </a>
-      </footer>
     </div>
   );
 }
+

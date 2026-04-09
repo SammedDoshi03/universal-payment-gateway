@@ -1,3 +1,4 @@
+"use client";
 import { useState } from 'react';
 import { useUpiPayment, PaymentParams } from './useUpiPayment';
 import { usePaymentConfig } from './UniversalPaymentProvider';

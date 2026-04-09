@@ -7,7 +7,7 @@ export const executeStripeCheckout = async (options: any, publishableKey?: strin
   
   try {
     // Dynamic import to prevent bundle bloat for users who don't use Stripe
-    const { initStripe, presentPaymentSheet } = require('@stripe/stripe-react-native');
+    const { initStripe } = require('@stripe/stripe-react-native');
     await initStripe({ publishableKey });
     
     // Simulate API delay for creating PaymentIntent
