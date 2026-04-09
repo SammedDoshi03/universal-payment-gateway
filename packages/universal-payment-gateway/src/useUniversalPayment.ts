@@ -16,7 +16,8 @@ export interface UniversalPaymentParams extends Partial<PaymentParams> {
   gatewayOverride?: 'STRIPE' | 'RAZORPAY'; 
   amount?: string;
   currency?: string;
-  sessionId?: string;
+  sessionId?: string; // Standardized for Web Redirects
+  clientSecret?: string; // Standardized for Stripe Mobile Intents
 }
 
 export const useUniversalPayment = () => {

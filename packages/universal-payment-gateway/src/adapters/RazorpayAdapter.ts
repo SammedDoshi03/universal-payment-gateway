@@ -6,17 +6,28 @@ export const executeRazorpayCheckout = async (options: any, keyId?: string) => {
   
   try {
     // Dynamic import to prevent bundle bloat for users who don't use Razorpay
-    require('react-native-razorpay');
+    const RazorpayCheckout = require('react-native-razorpay').default;
     
-    // Simulate API delay instead of full RazorpayCheckout.open() for structure 
-    return new Promise((resolve) => {
-      setTimeout(() => {
+    const rzpOptions = {
+      description: 'Transaction',
+      currency: options.currency || "INR",
+      key: keyId,
+      amount: String(Number(options.amount) * 100), // Razorpay natively expects subunits (paise/cents)
+      name: options.pn || 'Retail Store',
+      order_id: options.sessionId, // Must be passed via options to support real S2S integration
+      theme: { color: "#3399cc" }
+    };
+    
+    return new Promise((resolve, reject) => {
+      RazorpayCheckout.open(rzpOptions).then((data: any) => {
         resolve({
           status: 'SUCCESS',
           gateway: 'RAZORPAY',
-          nativeData: 'rzp_pay_xyz123'
+          nativeData: data.razorpay_payment_id
         });
-      }, 1500);
+      }).catch((error: any) => {
+        reject(new Error(error.description || error.message || "Razorpay transaction failed or was cancelled."));
+      });
     });
   } catch (err) {
     if ((err as Error).message.includes('not found')) {
