@@ -15,6 +15,12 @@ export const executeRazorpayCheckout = async (options: any, keyId?: string) => {
       amount: String(Number(options.amount) * 100), // Razorpay natively expects subunits (paise/cents)
       name: options.pn || 'Retail Store',
       order_id: options.sessionId, // Must be passed via options to support real S2S integration
+      prefill: {
+        method: options.method === 'NETBANKING' ? 'netbanking' 
+              : options.method === 'WALLET' ? 'wallet' 
+              : options.method === 'CARD' ? 'card' 
+              : undefined
+      },
       theme: { color: "#3399cc" }
     };
     
