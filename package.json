@@ -1,5 +1,5 @@
 {
-  "name": "universal-upi",
+  "name": "universal-payment-gateway",
   "private": true,
   "scripts": {
     "build": "turbo run build",

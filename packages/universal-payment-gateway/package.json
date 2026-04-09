@@ -30,13 +30,16 @@
     "gpay",
     "paytm"
   ],
-  "repository": "https://github.com/SammedDoshi03/universal-upi",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SammedDoshi03/universal-payment-gateway.git"
+  },
   "bugs": {
-    "url": "https://github.com/SammedDoshi03/universal-upi/issues"
+    "url": "https://github.com/SammedDoshi03/universal-payment-gateway/issues"
   },
   "author": "Sammed Doshi <sammeddoshi03.sd@gmail.com> (https://github.com/SammedDoshi03)",
   "license": "MIT",
-  "homepage": "https://github.com/SammedDoshi03/universal-upi#readme",
+  "homepage": "https://github.com/SammedDoshi03/universal-payment-gateway#readme",
   "dependencies": {
     "qrcode.react": "^4.2.0"
   },
