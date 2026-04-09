@@ -1,0 +1,10 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    "paths": {
+      "universal-upi": ["../src/index"],
+      "universal-upi/*": ["../src/*"]
+    }
+  }
+}

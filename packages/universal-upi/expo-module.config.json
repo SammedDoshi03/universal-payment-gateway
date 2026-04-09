@@ -1,0 +1,9 @@
+{
+  "platforms": ["apple", "android", "web"],
+  "apple": {
+    "modules": ["UniversalUpiModule"]
+  },
+  "android": {
+    "modules": ["expo.modules.universalupi.UniversalUpiModule"]
+  }
+}
