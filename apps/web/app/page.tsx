@@ -95,7 +95,7 @@ export default function Home() {
         {upiUrl && (
           <div style={{ padding: '20px', background: 'white', border: '2px solid black', margin: '20px 0' }}>
             <h3>Scan this QR Code with any UPI App</h3>
-            <UpiWebInterface paymentUrl={upiUrl} size={250} />
+            <UpiWebInterface upiUrl={upiUrl} amount="500.00" />
           </div>
         )}
 
