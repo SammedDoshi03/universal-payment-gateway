@@ -1,6 +1,6 @@
 {
   "name": "universal-payment-gateway",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "A cross-platform React & React Native SDK for native payments including UPI, Stripe, and Razorpay.",
   "main": "build/index.js",
   "types": "build/index.d.ts",
